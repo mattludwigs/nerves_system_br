@@ -1,0 +1,26 @@
+From 5b190205995de8bea50689ca01b2b4006a20a247 Mon Sep 17 00:00:00 2001
+From: Frank Hunleth <fhunleth@troodon-software.com>
+Date: Thu, 20 Sep 2018 02:09:39 -0400
+Subject: [PATCH] eccx08_ecdsa_cleanup -> eccx08_ec_cleanup
+
+Fixes linker error
+---
+ cryptoauthlib/lib/openssl/eccx08_eckey_meth.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/cryptoauthlib/lib/openssl/eccx08_eckey_meth.c b/cryptoauthlib/lib/openssl/eccx08_eckey_meth.c
+index 6eefd8c..8f66e75 100644
+--- a/cryptoauthlib/lib/openssl/eccx08_eckey_meth.c
++++ b/cryptoauthlib/lib/openssl/eccx08_eckey_meth.c
+@@ -914,7 +914,7 @@ int eccx08_ec_init(EC_METHOD ** ppMethod)
+     return ENGINE_OPENSSL_SUCCESS;
+ }
+ 
+-int eccx08_ecdsa_cleanup()
++int eccx08_ec_cleanup()
+ {
+     DEBUG_ENGINE("Entered\n");
+     if (eccx08_ec)
+-- 
+2.17.1
+

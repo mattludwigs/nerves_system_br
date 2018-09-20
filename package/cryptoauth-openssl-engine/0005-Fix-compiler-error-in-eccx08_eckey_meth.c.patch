@@ -1,0 +1,26 @@
+From 49b9ed0c947bd7c60e1f0192d8310d43587a71a2 Mon Sep 17 00:00:00 2001
+From: Frank Hunleth <fhunleth@troodon-software.com>
+Date: Thu, 20 Sep 2018 02:04:19 -0400
+Subject: [PATCH] Fix compiler error in eccx08_eckey_meth.c
+
+See https://github.com/MicrochipTech/cryptoauth-openssl-engine/issues/17
+---
+ cryptoauthlib/lib/openssl/eccx08_eckey_meth.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/cryptoauthlib/lib/openssl/eccx08_eckey_meth.c b/cryptoauthlib/lib/openssl/eccx08_eckey_meth.c
+index 2f9183d..6eefd8c 100644
+--- a/cryptoauthlib/lib/openssl/eccx08_eckey_meth.c
++++ b/cryptoauthlib/lib/openssl/eccx08_eckey_meth.c
+@@ -902,7 +902,7 @@ int eccx08_ec_init(EC_METHOD ** ppMethod)
+         return ENGINE_OPENSSL_FAILURE;
+     }
+ 
+-    EC_METHOD_set_name(eccx08_ecdsa, "ATECCX08 METHODS");
++    EC_METHOD_set_name(eccx08_ec, "ATECCX08 METHODS");
+ //    EC_METHOD_set_sign(eccx08_ecdsa, eccx08_ecdsa_do_sign);
+ 
+ #if ATCA_OPENSSL_ENGINE_ENABLE_HW_VERIFY
+-- 
+2.17.1
+

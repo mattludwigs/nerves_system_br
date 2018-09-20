@@ -1,0 +1,11 @@
+config BR2_PACKAGE_CRYPTOAUTH_OPENSSL_ENGINE
+	bool "cryptoauth-openssl-engine"
+	depends on BR2_PACKAGE_OPENSSL
+	help
+	  OpenSSL Engine implementation using ATECC508 for ECC key storage,
+	  ECDSA sign/verify, ECDH, and FIPS Random Number Generator (RNG).
+
+	  https://github.com/MicrochipTech/cryptoauth-openssl-engine
+
+comment "cryptoauth-openssl-engine needs openssl"
+	depends on !BR2_PACKAGE_OPENSSL

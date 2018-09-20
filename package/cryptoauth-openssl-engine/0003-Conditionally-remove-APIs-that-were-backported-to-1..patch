@@ -1,0 +1,34 @@
+From b3adfb9a12e37951a48298fa9ad1cdf5cdd4af83 Mon Sep 17 00:00:00 2001
+From: Frank Hunleth <fhunleth@troodon-software.com>
+Date: Thu, 20 Sep 2018 02:13:57 -0400
+Subject: [PATCH] Conditionally remove APIs that were backported to 1.0.2m
+
+See
+https://github.com/MicrochipTech/cryptoauth-openssl-engine/issues/15.
+---
+ cryptoauthlib/lib/openssl/eccx08_eckey_meth.c | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/cryptoauthlib/lib/openssl/eccx08_eckey_meth.c b/cryptoauthlib/lib/openssl/eccx08_eckey_meth.c
+index a857a92..2f9183d 100644
+--- a/cryptoauthlib/lib/openssl/eccx08_eckey_meth.c
++++ b/cryptoauthlib/lib/openssl/eccx08_eckey_meth.c
+@@ -816,6 +816,7 @@ int eccx08_pmeth_selector(ENGINE *e, EVP_PKEY_METHOD **pkey_meth,
+ }
+ 
+ #if ATCA_OPENSSL_OLD_API
++#if OPENSSL_VERSION_NUMBER < 0x100020d0
+ /* These are from the OpenSSL 1.1.x API */
+ 
+ static void EVP_PKEY_meth_get_init(EVP_PKEY_METHOD *pmeth, 
+@@ -883,6 +884,7 @@ static void EVP_PKEY_meth_get_derive(EVP_PKEY_METHOD *pmeth,
+         }
+     }
+ }
++#endif
+ #else
+ 
+ static EC_METHOD * eccx08_ec;
+-- 
+2.17.1
+

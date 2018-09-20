@@ -1,0 +1,77 @@
+From 2c70fe0a094539e9123e5afc027e91c0d8a18edd Mon Sep 17 00:00:00 2001
+From: Frank Hunleth <fhunleth@troodon-software.com>
+Date: Thu, 20 Sep 2018 01:53:23 -0400
+Subject: [PATCH] Makefile fixes
+
+---
+ cryptoauthlib/Makefile | 18 ++++++++++--------
+ 1 file changed, 10 insertions(+), 8 deletions(-)
+
+diff --git a/cryptoauthlib/Makefile b/cryptoauthlib/Makefile
+index 399db53..8351097 100644
+--- a/cryptoauthlib/Makefile
++++ b/cryptoauthlib/Makefile
+@@ -2,8 +2,6 @@
+ 
+ OPTIONS := ATCAPRINTF ATCA_HAL_KIT_CDC ENGINE_DYNAMIC_SUPPORT USE_ECCX08 ECC_DEBUG
+ 
+-SYSTEM_INCLUDES := /usr/include
+-
+ # Check platform
+ ifeq ($(OS),Windows_NT)
+ # Special check for simulated windows environments
+@@ -38,8 +36,14 @@ endif
+ endif
+ 
+ ifeq ($(uname_S),Linux)
+-CFLAGS += -g -O1 -m64 -Wall -fPIC $(addprefix -D,$(OPTIONS))
++# Set CFLAGS if unset
++CFLAGS = -g -O1 -m64
++LIBCRYPTOAUTH_CFLAGS += ${CFLAGS} -Wall -fPIC $(addprefix -D,$(OPTIONS))
++$(info $$LIBCRYPTOAUTH_CFLAGS is [${LIBCRYPTOAUTH_CFLAGS}])
++LIBCRYPTOAUTH_LDFLAGS += ${LDFLAGS} -shared
+ TARGET_ARCH := Linux
++else
++LIBCRYPTOAUTH_LDFLAGS += ${LDFLAGS} -dll -shared
+ endif
+ #    ifeq ($(uname_S),Darwin)
+ #        CCFLAGS += -D OSX
+@@ -55,8 +59,6 @@ endif
+ #        CCFLAGS += -D ARM
+ #    endif
+ 
+-OPENSSLDIR = /usr/include/openssl
+-
+ OUTDIR := $(abspath .build)
+ 
+ DEPFLAGS = -MT $@ -MMD -MP -MF $(OUTDIR)/$*.d
+@@ -108,7 +110,7 @@ TEST_OBJECTS := $(addprefix $(OUTDIR)/,$(notdir $(TEST_SOURCES:.c=.o)))
+ 
+ LIBCRYPTOAUTH_OBJECTS := $(addprefix $(OUTDIR)/,$(notdir $(LIBCRYPTOAUTH_OBJECTS:.c=.o)))
+ 
+-CFLAGS += $(addprefix -I, $(INCLUDE) $(TEST_INCLUDE) $(SYSTEM_INCLUDES))
++LIBCRYPTOAUTH_CFLAGS += $(addprefix -I, $(INCLUDE) $(TEST_INCLUDE))
+ 
+ # Regardless of platform set the vpath correctly
+ vpath %.c $(call BACK2SLASH,$(sort $(dir $(SOURCES) $(TEST_SOURCES))))
+@@ -117,7 +119,7 @@ $(OUTDIR):
+ 	$(call MKDIR, $(OUTDIR))
+ 
+ $(OUTDIR)/%.o : %.c $(OUTDIR)/%.d | $(OUTDIR)
+-	$(CC) $(DEPFLAGS) $(CFLAGS) -c $< -o $@
++	$(CC) $(DEPFLAGS) $(LIBCRYPTOAUTH_CFLAGS) -c $< -o $@
+ 
+ $(OUTDIR)/%.d: ;
+ .PRECIOUS: $(OUTDIR)/%.d
+@@ -126,7 +128,7 @@ $(OUTDIR)/libcryptoauth.a: $(LIBCRYPTOAUTH_OBJECTS) | $(OUTDIR)
+ 	$(AR) $(ARFLAGS) $@ $(LIBCRYPTOAUTH_OBJECTS)
+ 
+ $(OUTDIR)/libateccssl.so: $(LIBATECCSSL_OBJECTS) $(LIBCRYPTOAUTH_OBJECTS) | $(OUTDIR)
+-	$(LD) -dll -shared $(LIBATECCSSL_OBJECTS) $(LIBCRYPTOAUTH_OBJECTS) -o $@ -lcrypto -lrt
++	$(LD) $(LIBCRYPTOAUTH_LDFLAGS) $(LIBATECCSSL_OBJECTS) $(LIBCRYPTOAUTH_OBJECTS) -o $@ -lcrypto -lrt
+ 
+ $(OUTDIR)/test: $(OUTDIR)/libateccssl.so $(TEST_OBJECTS) | $(OUTDIR)
+ 	$(CC) -o $@ $(TEST_OBJECTS) -L$(OUTDIR) -lateccssl -lcrypto -lssl
+-- 
+2.17.1
+
