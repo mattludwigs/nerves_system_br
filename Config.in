@@ -30,6 +30,7 @@ config BR2_NERVES_ADDITIONAL_IMAGE_FILES
 source "$BR2_EXTERNAL_NERVES_PATH/package/bborg-overlays/Config.in"
 source "$BR2_EXTERNAL_NERVES_PATH/package/boardid/Config.in"
 source "$BR2_EXTERNAL_NERVES_PATH/package/cryptoauth-openssl-engine/Config.in"
+source "$BR2_EXTERNAL_NERVES_PATH/package/cryptoauthlib/Config.in"
 source "$BR2_EXTERNAL_NERVES_PATH/package/edk2/Config.in"
 source "$BR2_EXTERNAL_NERVES_PATH/package/erlinit/Config.in"
 source "$BR2_EXTERNAL_NERVES_PATH/package/libp11/Config.in"
