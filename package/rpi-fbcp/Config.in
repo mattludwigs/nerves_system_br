@@ -1,0 +1,7 @@
+config BR2_PACKAGE_RPI_FBCP
+	bool "rpi-fbcp"
+	help
+	  Raspberry Pi framebuffer copy
+
+	  https://github.com/tasanakorn/rpi-fbcp
+

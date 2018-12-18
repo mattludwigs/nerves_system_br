@@ -1,0 +1,25 @@
+From 9ea64d0e506c2c38579115c7268516764d647265 Mon Sep 17 00:00:00 2001
+From: Frank Hunleth <fhunleth@troodon-software.com>
+Date: Sun, 16 Dec 2018 01:13:20 -0500
+Subject: [PATCH] Make build script more buildroot friendly
+
+Signed-off-by: Guillermo A. Amaral <g@maral.me>
+---
+ CMakeLists.txt | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 6202553..6ce417b 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -11,4 +11,6 @@ link_directories(/opt/vc/lib)
+ 
+ add_executable(fbcp main.c)
+ 
+-target_link_libraries(fbcp bcm_host)
++target_link_libraries(fbcp bcm_host vchostif)
++
++install(TARGETS fbcp RUNTIME DESTINATION "${CMAKE_INSTALL_PREFIX}/sbin")
+-- 
+2.17.1
+
